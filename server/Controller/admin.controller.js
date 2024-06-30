@@ -1,4 +1,5 @@
 const Product = require('../Model/product.model');
+const uuid = require('uuid');  
 
 
 const getAllProducts = async (req, res) => {
@@ -11,17 +12,38 @@ const getAllProducts = async (req, res) => {
 };
 
 const addProduct = async (req, res) => {
-    const { productId, productName, productPrice, productDetails } = req.body;
-
+    const { productName, productPrice, productDetails } = req.body;
+  
     try {
-        const newProduct = new Product({ productId, productName, productPrice, productDetails });
-        await newProduct.save();
-        res.status(201).json({ message: 'Product added successfully', product: newProduct });
+        const newProductId = uuid.v4().slice(0, 3);
+      const newProduct = new Product({
+        productId: newProductId,
+        productName,
+        productPrice,
+        productDetails,
+        productImage: req.file ? req.file.path : null,
+      });
+      
+      await newProduct.save();
+      res.status(201).json({ message: 'Product added successfully', product: newProduct });
     } catch (err) {
-        res.status(400).json({ message: err.message });
+      res.status(400).json({ message: err.message });
     }
-};
+  };
+
+  const getProductById = async (req, res) => {
+    const productId = req.params.id; 
+    console.log(productId);// Assuming the product ID is passed as a route parameter
+  
+  
+      const product = await Product.findOne({productId});
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+      res.status(200).json(product);
+    
+  };
 
 module.exports = {
-    getAllProducts,addProduct
+    getAllProducts,addProduct,getProductById
 };

@@ -1,0 +1,28 @@
+.admin-main{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-btns{
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+}
+.header-admin{
+    width: 100%;
+}
+
+.pcard{
+    width: 100%;
+    /* margin-top: 4rem; */
+    margin-bottom: 3rem;
+    padding: 0;
+    padding-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+   justify-content: space-evenly;
+    align-items: center;
+  }

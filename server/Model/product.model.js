@@ -1,8 +1,10 @@
-const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/e-cart");
+// models/product.model.js
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://127.0.0.1:27017/e-cart');
+
 const productSchema = new mongoose.Schema({
-    productId: {
-    type: Number,
+  productId: {
+    type: String,
     required: true,
   },
   productName: {
@@ -16,7 +18,11 @@ const productSchema = new mongoose.Schema({
   productDetails: {
     type: String,
     required: true,
-  }
- });
+  },
+  productImage: {
+    type: String,
+    required: false, 
+  },
+});
 
-module.exports = mongoose.model("product", productSchema);
+module.exports = mongoose.model('product', productSchema);
