@@ -20,8 +20,8 @@ router.get('/product/:id', adminContoller.getProductById);
 router.post('/AddCart',  userContoller.AddtoCart);
 router.post('/RemoveFromCart', verifyToken, userContoller.RemoveCart);
 router.get('/GetAllCart/:id', userContoller.GetAll);
-router.get('/RemoveCart', verifyToken, userContoller.RemoveCart);
-router.get('/addQuantity', verifyToken, userContoller.addQuantity);
+router.post('/RemoveCart',  userContoller.removeQuantity);
+router.post('/addQuantity', userContoller.addQuantity);
 
 module.exports = router;
 

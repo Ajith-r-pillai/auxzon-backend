@@ -3,7 +3,6 @@ const express = require('express')
 const User = require('../Model/user.model');
 const Product = require('../Model/product.model');
 
-
 exports.AddtoCart = async (req, res) => {
     const { currentuserid, productId, quantity } = req.body;
 
@@ -18,17 +17,32 @@ exports.AddtoCart = async (req, res) => {
             return res.status(400).json({ message: 'Product not found' });
         }
 
-        user.cart.push({ productId, quantity, price: product.productPrice });
+        // Check if the product is already in the cart
+        const cartItem = user.cart.find(item => item.productId == productId);
+
+        if (cartItem) {
+            // If the product is already in the cart, send a response indicating this
+            return res.status(200).json({ message: 'Product is already in the cart' });
+        } else {
+            // Add the new product to the cart
+            user.cart.push({ productId, quantity, price: product.productPrice });
+        }
+
         await user.save();
 
         const totalPrice = user.cart.reduce((total, item) => total + item.quantity * item.price, 0);
 
-        res.status(200).json({ message: 'Item added to cart', cart: user.cart,totalPrice });
+        res.status(200).json({ message: 'Item added to cart', cart: user.cart, totalPrice });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+
+
+
+
 
 exports.RemoveCart = async (req, res) => {
     const { currentuserid, productId } = req.body;
@@ -119,7 +133,7 @@ console.log(userid)
         if (!user) {
             return res.status(400).json({ message: 'User not found' });
         }
-
+        const totalPrice = user.cart.reduce((total, item) => total + item.quantity * item.price, 0);
         let cartDetails = [];
         for (let i = 0; i < user.cart.length; i++) {
             const cartItem = user.cart[i];
@@ -134,7 +148,7 @@ console.log(userid)
             }
         }
 
-        res.status(200).json({ cart: cartDetails });
+        res.status(200).json({ cart: cartDetails,totalPrice });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
     }
